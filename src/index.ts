@@ -8,11 +8,10 @@ app.use(express.json());
 
 app.use('/api', messageRoutes)
 
-app.get("/health", (req,res) => {
+app.get("/health", (req, res) => {
     res.send("OK")
 })
 
-
 app.listen(3000, () => {
     console.log("Server started on port 3000")
-})
+})
