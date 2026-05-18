@@ -1,17 +1,27 @@
-import express from "express"
-import type { Request, Response } from "express"
-import "dotenv/config";
-import messageRoutes from "./routes/messages"
+import express from "express";
+import http from "http";
+import { Server } from "socket.io";
+import messageRoutes from "./routes/messages";
+import { setupSocket } from "./socket/chat.socket";
 
 const app = express();
-app.use(express.json());
 
-app.use('/api', messageRoutes)
+app.use(express.json());
+app.use("/api", messageRoutes);
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
+setupSocket(io);
 
 app.get("/health", (req, res) => {
     res.send("OK")
 })
 
-app.listen(3000, () => {
-    console.log("Server started on port 3000")
-})
+server.listen(3000, () => {
+  console.log("Server started on port 3000");
+});
